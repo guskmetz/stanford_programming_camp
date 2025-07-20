@@ -1,6 +1,6 @@
 ---
 title: "Programming Camp Day 2"
-author: "Shifrah Aron-Dine"
+author: "Augustus Kmetz"
 date: "2023-09-05"
 format:
   revealjs:
