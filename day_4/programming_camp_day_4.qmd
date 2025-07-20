@@ -2,23 +2,72 @@
 title: "Programming Camp Day 4"
 author: "Augustus Kmetz"
 date: "2023-09-05"
-format:
-  revealjs:
-    theme: "white"
-    slideLevel: 2
-    incremental: true
-    transition: "fade"
-    width: 1024
-    height: 768
-    center: true
-    controls: true
-    progress: true
-    history: true
-    margin: 0.1
-    backgroundTransition: "slide"
-    autoAnimate: true
-    autoAnimateEasing: "ease"
-    autoAnimateDuration: 500
+format: 
+  beamer:
+    include-in-header:
+        text: |
+          \usepackage{cancel}
+          \usepackage{bigints}
+          \usetheme{Boadilla}
+          \usepackage{bigints}
+          \usepackage{dsfont}
+          \usepackage{amsmath}
+          \usepackage{amsthm}
+          \usepackage{soul}
+          \usepackage{color}
+          \usepackage{graphicx}
+          \usepackage{caption}
+          \usepackage{subcaption}
+          \usepackage{url}
+          \usepackage{mathtools}
+          \usepackage{natbib}
+          \usepackage{parskip}
+          \usepackage{placeins}
+          \usepackage{setspace}
+          \usepackage{color} 
+          \usepackage{multicol}
+          \usepackage{tikz}
+          \usetikzlibrary{shapes.multipart}
+          \usepackage{verbatim}
+          \usepackage{graphicx} 
+          \usepackage{adjustbox}
+          \usepackage{animate}
+          \usepackage{enumerate}
+          \usepackage{appendixnumberbeamer} 
+          \usepackage{xcolor}
+          \usepackage{animate}
+          \definecolor{textblue}{HTML}{225ea8}
+          \setbeamercolor{frametitle}{fg=textblue,bg=white}
+          \setbeamercolor{title}{fg=textblue}
+          \setbeamercolor{itemize item}{fg=textblue}
+          \setbeamercolor{itemize subitem}{fg=textblue}
+          \setbeamercolor{itemize subsubitem}{fg=textblue}
+          \setbeamertemplate{itemize item}[circle]
+          \setbeamertemplate{itemize subitem}[square]
+          \setbeamertemplate{itemize subsubitem}[triangle]
+          \setbeamercolor{button}{bg=buttonblue,fg=white}
+          \setbeamercolor{section in toc}{fg=textblue}
+          \setbeamercolor{subsection in toc}{fg=textblue}
+          \setbeamercolor{enumerate subitem}{fg=black}
+          \captionsetup[figure]{labelformat=empty}
+          \captionsetup[subfigure]{labelformat=empty}
+          \setbeamertemplate{navigation symbols}{}
+          \setbeamertemplate{enumerate items}[default]
+          \setbeamertemplate{footline}[frame number]
+          \setbeamertemplate{section in toc}{\hspace*{1em}\inserttocsection}
+          \mode<presentation>{}
+          \setlength\belowcaptionskip{-6pt}
+          \AtBeginSection[]
+          {
+            \begin{frame}<beamer>
+             \thispagestyle{empty} 
+             \addtocounter{framenumber}{-1}
+              \frametitle{}
+              \begin{center}
+              \Large\color{textblue}\insertsectionhead\par%
+              \end{center}
+            \end{frame}
+          }
 ---
 
 ```{r setup, include=FALSE}

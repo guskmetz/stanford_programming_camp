@@ -2,23 +2,72 @@
 title: "Programming Camp Day 1"
 author: "Augustus Kmetz"
 date: "2023-09-05"
-format:
-  revealjs:
-    theme: "white"
-    slideLevel: 2
-    incremental: true
-    transition: "fade"
-    width: 1024
-    height: 768
-    center: true
-    controls: true
-    progress: true
-    history: true
-    margin: 0.1
-    backgroundTransition: "slide"
-    autoAnimate: true
-    autoAnimateEasing: "ease"
-    autoAnimateDuration: 500
+format: 
+  beamer:
+    include-in-header:
+        text: |
+          \usepackage{cancel}
+          \usepackage{bigints}
+          \usetheme{Boadilla}
+          \usepackage{bigints}
+          \usepackage{dsfont}
+          \usepackage{amsmath}
+          \usepackage{amsthm}
+          \usepackage{soul}
+          \usepackage{color}
+          \usepackage{graphicx}
+          \usepackage{caption}
+          \usepackage{subcaption}
+          \usepackage{url}
+          \usepackage{mathtools}
+          \usepackage{natbib}
+          \usepackage{parskip}
+          \usepackage{placeins}
+          \usepackage{setspace}
+          \usepackage{color} 
+          \usepackage{multicol}
+          \usepackage{tikz}
+          \usetikzlibrary{shapes.multipart}
+          \usepackage{verbatim}
+          \usepackage{graphicx} 
+          \usepackage{adjustbox}
+          \usepackage{animate}
+          \usepackage{enumerate}
+          \usepackage{appendixnumberbeamer} 
+          \usepackage{xcolor}
+          \usepackage{animate}
+          \definecolor{textblue}{HTML}{225ea8}
+          \setbeamercolor{frametitle}{fg=textblue,bg=white}
+          \setbeamercolor{title}{fg=textblue}
+          \setbeamercolor{itemize item}{fg=textblue}
+          \setbeamercolor{itemize subitem}{fg=textblue}
+          \setbeamercolor{itemize subsubitem}{fg=textblue}
+          \setbeamertemplate{itemize item}[circle]
+          \setbeamertemplate{itemize subitem}[square]
+          \setbeamertemplate{itemize subsubitem}[triangle]
+          \setbeamercolor{button}{bg=buttonblue,fg=white}
+          \setbeamercolor{section in toc}{fg=textblue}
+          \setbeamercolor{subsection in toc}{fg=textblue}
+          \setbeamercolor{enumerate subitem}{fg=black}
+          \captionsetup[figure]{labelformat=empty}
+          \captionsetup[subfigure]{labelformat=empty}
+          \setbeamertemplate{navigation symbols}{}
+          \setbeamertemplate{enumerate items}[default]
+          \setbeamertemplate{footline}[frame number]
+          \setbeamertemplate{section in toc}{\hspace*{1em}\inserttocsection}
+          \mode<presentation>{}
+          \setlength\belowcaptionskip{-6pt}
+          \AtBeginSection[]
+          {
+            \begin{frame}<beamer>
+             \thispagestyle{empty} 
+             \addtocounter{framenumber}{-1}
+              \frametitle{}
+              \begin{center}
+              \Large\color{textblue}\insertsectionhead\par%
+              \end{center}
+            \end{frame}
+          }
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +77,7 @@ library(AER)
 ```
 
 
-## Welcome to Stanford Economics!
+## Welcome to Stanford Economics!  {.smaller}
 
 \thispagestyle{empty} 
 \addtocounter{framenumber}{-1}
@@ -45,7 +94,7 @@ Introduce yourselves
 * Hobby *or* a book/movie/other thing you did recently 
 
 
-## Some Advice
+## Some Advice {.smaller}
 
 
 Free Disposal 
@@ -59,30 +108,19 @@ Free Disposal
   * SF is fun but Stanford's comparative advantage is nature
 
 
-## Famous Nature!
+## Famous Nature! {.smaller}
 
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Half Dome and Nevada Falls from Panoramic Trail}
-     \includegraphics[width=0.8\textwidth]{figures/yosemite.jpg}
-     \end{centering}
-\end{figure}
+Insert Yosemite picture here
 
 
 
-## Local Nature!
+## Local Nature! {.smaller}
 
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Russian Ridge}
-     \includegraphics[width=0.8\textwidth]{figures/long_commute.jpg}
-     \end{centering}
-\end{figure}
+Insert Russian Ridge or something else here
 
-
-## Why do we have programming camp?
+## Why do we have programming camp? {.smaller}
 
 
 * Modern economics **requires** more than pen and paper
@@ -97,24 +135,16 @@ Free Disposal
   * Get you ready for dynamic programming in first year Macro
 * Very low stakes - you are the best judge of the value of your time
 
-## Why do we have programming camp?
+## Why do we have programming camp? {.smaller}
 
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.8\textwidth]{figures/code_quality.png}
-     \end{centering}
-\end{figure}
+Code quality picture
 
 
-## Use an appropriate tool for the job at hand
+## Use an appropriate tool for the job at hand {.smaller}
 
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.8\textwidth]{figures/real_programmers.png}
-     \end{centering}
-\end{figure}
+Real programmers
 
 
 
@@ -122,7 +152,7 @@ Free Disposal
 # Intro to R
 
 
-## Why R as an economist? 
+## Why R as an economist?  {.smaller}
 
 Pros:
 
@@ -195,33 +225,18 @@ We will use Rstudio Cloud
 
 ## RStudio Cloud's Interface
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{RStudio Cloud Landing Page}
-     \includegraphics[width=0.8\textwidth]{figures/rstudio_cloud_landing.jpg}
-     \end{centering}
-\end{figure}
+R Studio cloud landing page
 
 ## RStudio Cloud's Interface
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Opening a Project}
-     \includegraphics[width=0.8\textwidth]{figures/rstudio_cloud_new_project.jpg}
-     \end{centering}
-\end{figure}
+RStudio cloud interface
 
 
 ## RStudio Cloud's Interface
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Save a Permanent Copy}
-     \includegraphics[width=0.8\textwidth]{figures/rstudio_cloud_save_permanent_copy.jpg}
-     \end{centering}
-\end{figure}
+Save a permanent copy
 
-## Running R code
+## Running R code {.smaller}
 
 Interpreter mode 
 
@@ -328,7 +343,7 @@ Why don't these work?
 * R and all the associated packages have many functions that are all called in a similar manner:
 
 ```{r, eval = F}
-function_name(arugment_1 = value_1, 
+function_name(argument_1 = value_1, 
               argument_2 = value_2,
               ...,
               argument_n = value_n)
@@ -353,20 +368,12 @@ function_name(arugment_1 = value_1,
 
 ## Packages
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.8\textwidth]{figures/base_r.jpg}
-     \end{centering}
-\end{figure}
+Base R packages
 
 
 ## Packages
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.8\textwidth]{figures/r_packages.jpg}
-     \end{centering}
-\end{figure}
+R packages
 
 
 ## Packages 
@@ -390,8 +397,6 @@ library(AER)
 
 ## Why do we need to visualize data?
 
-\centering
-\animategraphics[loop, autoplay]{20}{figures/dino_gif/frame-}{0}{294}
 
 [Matejka & Fitzmaurice 2017](https://www.autodesk.com/research/publications/same-stats-different-graphs)
 
@@ -425,30 +430,21 @@ library(AER)
 
 ## A good graph
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Population Weighted Distribution of Taste}
-     \includegraphics[width=0.8\textwidth]{figures/deposit_spread.pdf}
-     \end{centering}
-\end{figure}
+Population Weighted Distribution of Taste
+figures/deposit_spread.pdf
+
+
 
 ## Good graphs lead to other good graphs
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Distribution of Taste by Age}
-     \includegraphics[width=0.8\textwidth]{figures/deposit_spread_age.pdf}
-     \end{centering}
-\end{figure}
+Distribution of Taste by Age
+figures/deposit_spread_age.pdf
 
 ## Fancy graphics
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \caption{Atlantic Hurricane Tracks}
-     \includegraphics[width=0.8\textwidth]{figures/hurricane_tracks.jpeg}
-     \end{centering}
-\end{figure}
+Atlantic Hurricane Tracks
+figures/hurricane_tracks.jpeg
+
 
 
 ## How to build a plot
@@ -488,20 +484,12 @@ We can look at the data using the functions: `head()`, `tail()`, `summary()`, an
 
 ## Elements of a plot
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.8\textwidth]{figures/programming_camp_day_1_elements_of_plot.jpg}
-     \end{centering}
-\end{figure}
+elements of a plot
 
 
 ## A complete plot
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.5\textwidth]{figures/programming_camp_day_1_complete_plot.jpg}
-     \end{centering}
-\end{figure}
+the complete plot
 
 
 ## Actually building the plot
@@ -544,11 +532,8 @@ ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
 ## Discrete vs continous aesthetics
 
 
-\begin{figure}[!htbp]
-     \begin{centering}
-     \includegraphics[width=0.8\textwidth]{figures/discrete_vs_continous_aes.jpg}
-     \end{centering}
-\end{figure}
+discrete vs continuous aesthetics
+
 
 ## Layers
 
@@ -571,7 +556,7 @@ ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
 
 ## Layers in the wild
 
-```{r, eval = F}
+```{r layers_in_wild, eval = F}
 ggplot() + 
 	geom_histogram(data = CigarettesSW, 
 	               aes(x = tax, fill = year),
@@ -591,7 +576,7 @@ ggplot() +
 
 How has the distribution of taxes changed over time? 
 
-```{r, eval = F, echo = T}
+```{r noeval_make_a_point_plot, eval = F, echo = T}
 ggplot() + 
 	geom_histogram(data = CigarettesSW, 
 	               aes(x = tax, fill = year),
@@ -609,7 +594,7 @@ ggplot() +
 
 How has the distribution of taxes changed over time? 
 
-```{r, eval = T, echo = F}
+```{r make_a_point_plot}
 ggplot() + 
 	geom_histogram(data = CigarettesSW, 
 	               aes(x = tax, fill = year),
@@ -640,7 +625,7 @@ ggplot(CigarettesSW, aes(x = tax, fill = year)) +
 * What chart you use/how much of the data you show depends on what point you are trying to make 
 * Can use different graphics to make your messaging more "crisp"
 
-```{r, echo = F}
+```{r crisper_plot, echo = F}
 ggplot(CigarettesSW, aes(x = tax, fill = year)) + 
 	geom_density(alpha = 0.5, adjust = 2) +
 	labs(x = "Average Excise Tax",
