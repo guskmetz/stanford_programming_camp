@@ -1,0 +1,798 @@
+---
+title: "Programming Camp Day 2"
+author: "Shifrah Aron-Dine"
+date: "2023-09-05"
+format:
+  revealjs:
+    theme: "white"
+    slideLevel: 2
+    incremental: true
+    transition: "fade"
+    width: 1024
+    height: 768
+    center: true
+    controls: true
+    progress: true
+    history: true
+    margin: 0.1
+    backgroundTransition: "slide"
+    autoAnimate: true
+    autoAnimateEasing: "ease"
+    autoAnimateDuration: 500
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, fig.width = 6.5, fig.height = 3)
+library(tidyverse)
+library(AER)
+library(babynames)
+library(tufte)
+
+options(dplyr.summarise.inform = FALSE)
+```
+
+
+## Welcome back!
+
+Plans for today:
+
+* Importing data
+* Transforming data
+* Tidy data
+
+
+## babynames.csv
+
+babynames.csv
+
+ * names and sex of babies born in the US from 1880 to 2017
+ * data compiled by the Social Security Administration
+ * 1.9M rows
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.8\textwidth]{figures/files.jpg}
+     \end{centering}
+\end{figure}
+
+## Number of girls with the name Shifra(h)
+
+```{r, echo = F}
+babynames %>%
+  filter(name == "Shifra") %>%
+ggplot() +
+  geom_line(aes(x = year, y = n))
+```
+
+Q for later: Why is the correct spelling of my name not in this data set?
+
+# Import Data
+
+## Import a dataset (the wrong way)
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.5\textwidth]{figures/import_dataset.jpg}
+     \end{centering}
+\end{figure}
+
+
+## Import a dataset (the wrong way)
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.5\textwidth]{figures/import_dataset_code.jpg}
+     \end{centering}
+\end{figure}
+
+**Q:** But is this reproducible?
+
+## Working directory
+
+* The current working directory is the location which R is currently pointing to
+* Whenever you try to read or save a file without specifying the path explicitly that is where R will "look"
+* To see the current working directory use `getwd()`
+* To change the working directory use `setwd("path/to/directory")`
+* When you open a R file that folder automatically becomes the wd
+* **Best practice** is to specify files paths relative to the main folder of a project
+
+## Paths and directory names
+
+* R inherits its file and folder naming conventions from UNIX and uses forward slashes for the directories, e.g. `/data/raw/FEMA/`
+* Backslashes serve a different purpose - they are used as escape characters and to isolate special characters
+* To avoid problems, directory names should **NOT** contain spaces and special characters
+
+## Back to babynames
+
+* A common text file format is a comma delimited text file: .csv
+* These files use comma as a column separator
+
+```{r, eval = F}
+year,sex,name,n,prop
+1880,F,Mary,7065,0.0724
+1880,F,Anna,2604,0.0267
+```
+
+* To read these files use the following command
+
+```{r, eval = F}
+my_data <- read_csv("path/to/filename.csv")
+```
+
+## The readr package
+
+* `readr` is for reading rectangular text data into R
+* Very fast and easy to customize how file is parsed
+* `readr` supports several file formats with general `read_<...>()` functions:
+  
+  * `read_csv()`: comma-separated files
+  * `read_tsv()`: tab-separated files
+  * `read_delim()`: general delimited files
+  * `read_fwf()`: fixed-width files
+  * `read_table()`: tabular files where columns are separated by white-space
+  * `read_log()`: web log files
+  
+## Importing other types of data  
+
+Rectangular data:
+
+* package `haven` reads SPSS, Stata and SAS files
+* package `readxl` reads excel files (both .xls and .xlsx)
+
+Hierarchical data:
+
+* `jsonlite` for json (common for browser-server communications)
+* `xm12` for XML (common for textual data in web services)
+
+And many many more...
+
+## Back to babynames
+
+```{r, eval = F}
+babynames <- read_csv("data/babynames.csv")
+```
+```{r, size="tiny"}
+babynames
+```
+
+
+## Back to babynames
+
+```{r, echo = F}
+babynames %>%
+  filter(name == "Shifra") %>%
+ggplot() +
+  geom_line(aes(x = year, y = n)) +
+  labs(x = "Year",
+       y = "Number",
+       title = "Number of Girls Named Shifra(h) over Time")
+```
+
+**Q:** Which geom?
+
+## Plotting babynames
+
+What happens if we plot the data?
+
+```{r, eval = F}
+ggplot(babynames) + 
+  geom_line(mapping = aes(x = year, y = prop))
+```
+
+```{r, eval = F, echo = F}
+p_babynames <-
+  ggplot(babynames) + 
+  geom_line(mapping = aes(x = year, y = prop))
+
+ggsave(p_babynames, filename = "figures/babynames_geom_line.jpg", width = 6.5, height = 3, dpi = 300)
+```
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.8\textwidth]{figures/babynames_geom_line.jpg}
+     \end{centering}
+\end{figure}
+
+
+## Plotting babynames
+
+Try a different geom?
+
+```{r, eval = F}
+ggplot(babynames) + 
+  geom_point(mapping = aes(x = year, y = prop))
+```
+
+```{r, eval = F, echo = F}
+p_babynames <-
+  ggplot(babynames) + 
+  geom_point(mapping = aes(x = year, y = prop))
+
+ggsave(p_babynames, filename = "figures/babynames_geom_point.jpg", width = 6.5, height = 3, dpi = 300)
+```
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.8\textwidth]{figures/babynames_geom_point.jpg}
+     \end{centering}
+\end{figure}
+
+
+## How to isolate?
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.8\textwidth]{figures/filter.jpg}
+     \end{centering}
+\end{figure}
+
+# Transforming data
+
+## Transforming data
+
+The `dplyr` package is part of the `tidyverse` which:
+
+* introduces a **grammar** for transforming tabular data
+* is fast on data frames (written in C++) speed of C with ease of R
+* intuitive to write and easy to read esp when using chaining syntax
+
+
+## `dplyr` verbs (functions)
+
+`dplyr` verbs handle the vast majority of your data needs:
+
+* `filter()` - for picking observations by their values
+* `select()` - for picking variables by their names
+* `arrange()` - for reordering rows
+* `mutate()` - for creating new variables with functions on existing variables
+* `summarise()` - for collapsing many values down to a single summary
+
+All of the above can be done using ugly and slow base R functions
+
+## The structure of `dplyr` functions
+
+All verbs work similarly:
+
+  * The first argument is a tibble (or data frame)
+  * The subsequent ones describe what to do, using the variable names
+  * The results is a new tibble
+
+
+## select()
+
+Extract columns by name
+
+```{r, eval = F}
+select(.data, name_col_1, name_col_2, ...)
+```
+
+```{r, eval = F}
+select(babynames, name, prop)
+```
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.8\textwidth]{figures/select.jpg}
+     \end{centering}
+\end{figure}
+
+## select() helpers
+
+**:** - select range of columns
+
+```{r, eval = F}
+select(babynames, year:name)
+```
+
+**-** - select every column but ...
+
+```{r, eval = F}
+select(babynames, -prop)
+```
+
+**starts_with()** - select columns that start with...
+
+```{r, eval = F}
+select(babynames, starts_with("n"))
+```
+
+**ends_with()** - select every column that ends with ...
+
+```{r, eval = F}
+select(babynames, ends_with("e"))
+```
+
+Any many more!
+
+## Quiz
+
+Which of these is NOT a way to select the **name** and **n** columns together?
+
+```{r, eval = F}
+select(babynames, -c(year, sex, prop))
+```
+
+```{r, eval = F}
+select(babynames, starts_with("n"))
+```
+
+```{r, eval = F}
+select(babynames, ends_with("n"))
+```
+
+## `filter()`
+
+Extract rows that meet logical criteria
+
+```{r, eval = F}
+filter(.data, condition_1, condition_2, ...)
+```
+
+```{r, eval = F}
+filter(babynames, name == "Garrett")
+```
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.6\textwidth]{figures/filter.jpg}
+     \end{centering}
+\end{figure}
+
+## Logical tests
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.6\textwidth]{figures/comparisons.jpg}
+     \end{centering}
+\end{figure}
+
+## Logical tests
+
+```{r}
+x <- 1
+x >= 2
+```
+
+```{r}
+x <- c(1,2,3)
+x >= 2
+```
+
+## Missing Values
+
+`NA` stands for a missing value
+
+Handling missing/infinite/divide by 0 values can be a bit tricky.
+
+What is the result?
+
+```{r, eval = F}
+1 == 1
+1 == NA
+NA == NA
+1 + Inf
+1 + NaN
+Inf == Inf
+```
+
+## Logical tests
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.6\textwidth]{figures/comparisons_isna.jpg}
+     \end{centering}
+\end{figure}
+
+Same syntax works for `Inf` and `NaN`: `is.inf()`, `is.nan()`
+
+## Your turn!
+
+Use `filter`, `babynames` and the logical operators to:
+
+* Make a plot of your name's popularity over time (or linguistically similar name)
+* Which name had the highest ever number/proportion of babies?
+
+## Two common mistakes
+
+1. Using `=` instead of `==`
+
+```{r, eval = F}
+filter(babynames, name = "Shifra")
+filter(babynames, name =="Shifra")
+```
+
+2. Forgetting quotes 
+
+```{r, eval = F}
+filter(babynames, name == Shifra)
+filter(babynames, name =="Shifra")
+```
+
+
+## Boolean operators
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.6\textwidth]{figures/boolean.jpg}
+     \end{centering}
+\end{figure}
+
+## Your turn!
+
+Use Boolean operators to alter the code below to return only the rows that contain:
+
+* Boys named Leslie
+* Names that were used by exactly 5 or 6 children in 1880
+* Names that are one of Anakin, Leia, Luke
+
+`filter(babyname, name == "Sea" | name == "Anemone")`
+
+## Two more common mistakes
+
+3. Collapsing multiple tests into one
+
+```{r, eval = F}
+filter(babynames, 10 < n < 20)
+filter(babynames, 10 < n, n < 20)
+```
+
+4. Stringing together many tests (when you use `%in%`)
+
+```{r, eval = F}
+filter(babynames, n == 5 | n == 6 | n == 7 )
+filter(babynames, n %in% c(5, 6, 7))
+```
+
+## arrange()
+
+Order rows from smallest to largest values
+
+```{r, eval = F}
+arrange(.data, order_first, order_second, ...)
+```
+
+```{r, eval = F}
+arrange(babynames, n)
+```
+
+order rows from largest to smallest values
+
+```{r, eval = F}
+arrange(babynames, desc(n))
+```
+
+**Q**: Why is the name Shifrah not in `babynames`?
+
+## Steps
+
+Goal: create a data set called `top_5_M_2015` that contains the 5 most popular boy baby names from 2015
+
+Steps
+
+1. filter to boys born in 2015
+2. select the name and n columns
+3. arrange these columns so that the most popular names appear near the top
+4. use `head` to take the top 5
+
+## Steps 
+
+```{r, eval = F}
+top_5_M_2015 <- filter(babynames, year == 2015, sex == "M")
+top_5_M_2015 <- select(top_5_M_2015, name, n)
+top_5_M_2015 <- arrange(top_5_M_2015, desc(n))
+top_5_M_2015 <- head(top_5_M_2015, n = 5)
+```
+
+
+```{r, eval = F}
+top_5_M_2015 <- 
+  head(arrange(select(filter(babynames, year == 2015, sex == "M"), 
+  name, n), desc(n)), n = 5)
+```
+
+
+## The pipe operator %>%
+
+```{r, eval = F}
+filter(babynames, year == 2015, sex == "M")
+babynames %>% filter(year == 2015, sex == "M")
+```
+
+Passes results on left into first argument of function on right
+
+In pipe notation you use:
+
+* `x %>% f(y)` rather than `f(x, y)`
+* `x %>% f(y) %>% h(z)` rather than `h(f(x,y),z)`
+
+This is similar to Unix pipes
+
+## Pipes
+
+```{r, eval = F}
+top_5_M_2015 <-
+  babynames %>%
+  filter(year == 2015, sex == "M") %>%
+  select(name, n) %>%
+  arrange(desc(n)) %>%
+  head(n = 5)
+```
+
+Try to use `%>%` to write a sequence of functions that make a plot of your name's popularity over time (or linguistically similar name)
+
+## Pipes
+
+```{r}
+babynames %>%
+  filter(name == "Shifra", sex == "F") %>%
+  ggplot() +
+  geom_line(aes(x = year, y = n))
+```
+
+
+## What are the most popular names?
+
+Do we have tools to:
+
+1. Calculate the total number of children with each name?
+2. Calculate the number of unique names over time?
+3. Calculate the share of babies captured by the top 10 names?
+
+...not quite yet
+
+## `summarise()`
+
+compute table of summaries 
+
+```{r, eval = F}
+summarise(.data, 
+          summary_stat_1 = function_1(variable_1),
+          summary_stat_2 = function_2(variable_2))
+```
+
+```{r, eval = F}
+babynames %>% 
+  summarise(total = sum(n), max = max(n))
+```
+
+
+```{r, eval = F}
+babynames %>% 
+  filter(name == "Shifra") %>%
+  summarise(total = sum(n), max = max(n))
+```
+
+**Q**: How can we do this for each name? 
+
+## `group_by()`
+
+Groups cases by common values
+
+```{r, eval = F}
+group_by(.data, first_variable, second_variable, ...)
+```
+
+```{r, eval = F}
+babynames %>%
+  group_by(sex) %>%
+  summarise(total = sum(n))
+```
+
+`ungroup()` - removes grouping criteria from a data frame
+
+```{r, eval = F}
+babynames %>%
+  group_by(sex) %>%
+  ungroup() %>%
+  summarise(total = sum(n)) 
+```
+
+## Elementary but useful summary functions
+
+Aggregation functions return one value per group
+
+* `min(x)`, `median(x)`, `max(x)`, `quantile(x, p)`
+* `n()`, `n_distinct()`, `sum(x)`, `mean(x)`
+* `sum(x > 10)`, `mean(x > 0)`
+* `sd(x)`, `var(x)`
+
+Window functions return multiple values per group
+
+* `top_n()`
+* `lead()`, `lag()`
+
+## Your turn!
+
+Partner up
+
+1. For each year calculate the number of distinct names by sex. Plot these time series.
+2. Plot the share of babies with a name among the top 10 names over time by sex
+
+
+
+## Distinct names Over time
+
+
+```{r, echo = F}
+babynames %>%
+  group_by(year, sex) %>%
+  summarise(n_names = n_distinct(name)) %>%
+  ggplot(aes(x = year, y = n_names, color = sex)) +
+  geom_line() +
+  labs(x = "Year", 
+       y = "Number", 
+       title = "Number of Distinct Baby Names over Time",
+       caption = "Note: Only names with at least five records are included in the SSA data.") 
+```
+
+## Distinct names Over time
+
+
+```{r, eval = F}
+babynames %>%
+  group_by(year, sex) %>%
+  summarise(n_names = n_distinct(name)) %>%
+  ggplot(aes(x = year, y = n_names, color = sex)) +
+  geom_line() +
+  labs(x = "Year", 
+       y = "Number", 
+       title = "Number of Distinct Baby Names over Time",
+       caption = "Note: Only names with at least five records are included in the SSA data.") 
+```
+
+
+## Top share over time
+
+```{r, echo = F}
+babynames %>%
+  group_by(year, sex) %>%
+  arrange(prop) %>%
+  top_n(10, wt = prop) %>%
+  summarise(total_prop = sum(prop)) %>%
+  ggplot(aes(x = year, y = total_prop, color = sex)) +
+  geom_line() +
+  labs(x = "Year", 
+       y = "Share", 
+       title = "Share of Babies with Top 10 Names over Time") 
+```
+
+## Top share over time
+
+```{r, eval = F}
+babynames %>%
+  group_by(year, sex) %>%
+  arrange(prop) %>%
+  top_n(10, wt = prop) %>%
+  summarise(total_prop = sum(prop)) %>%
+  ggplot(aes(x = year, y = total_prop, color = sex)) +
+  geom_line() +
+  labs(x = "Year", 
+       y = "Share", 
+       title = "Share of Babies with Top 10 Names over Time") 
+```
+
+
+## `mutate()`
+
+Create new columns 
+```{r, eval = F}
+mutate(.data, 
+        new_var_1 = function_1(variable_1),
+        new_var_2 = function_2(variable_2))
+```
+
+```{r, eval = F}
+babynames %>% 
+  mutate(percent = round(prop * 100, 2))
+```
+
+Any vectorized function can be used with `mutate()` including:
+
+* arithmetic operators (`+`, `-`, `/`, `*`, etc)
+* logical operators (`<`, `<=`, `>=`, `==`, `!=`)
+* logarithmic and exponential transformations (`log`, `log10`, `exp`)
+* offsets (`lead`, `lag`)
+* cumulative rolling aggregates (`cumsum`, `cumprod`, `cummin`, `cummax`)
+* ranking (`min_rank`, `percent_rank`)
+
+
+## Other useful `dplyr` functions 
+
+* `rename()` - change the name of variables
+* `count()` - shortcut for `group_by() %>% summarise(n = n())`
+* `distinct()` - 1 row for each variable value
+* `sample_n()`, `sample_frac()` - random sample of tibble
+* `pull()` - extract a single column as a vector
+* `slice()` - subset rows using their position
+
+## Names that "flash in the pan"
+
+What names experience a dramatic rise/fall in popularity?
+
+```{r, echo = F}
+babynames %>%
+  filter(name %in% c("Rihanna", "Farrah", "Dewey", "Elvis")) %>%
+  ggplot(aes(x = year, y = prop, color = sex)) +
+  geom_line() + 
+  facet_wrap("name", scales = "free_y") +
+  theme(legend.position = "top")
+```
+
+
+## Your turn
+
+Step 1: find the names that experience a collapse in popularity
+
+
+1. Filter to names that have at least 1% babies with that name (for a sex)
+2. For each name calculate the percent change in `prop` over time
+3. Take the top 10 most dramatic collapses over time
+
+Step 2: plot the popularity over time for those names
+
+
+## Names that "flash in the pan"
+
+```{r, echo = F}
+babynames_flash <-
+  babynames %>%
+  group_by(name, sex) %>%
+  mutate(max_prop = max(prop)) %>%
+  filter(max_prop > 0.01) %>%
+  mutate(change_in_pop = (prop/lag(prop, 1) - 1)) %>%
+  summarise(min_change = min(change_in_pop, na.rm = T)) %>%
+  group_by(sex) %>%
+  arrange(min_change) %>%
+  slice(1:5) %>%
+  pull(name)
+
+babynames %>%
+  filter(name %in% babynames_flash) %>%
+  ggplot(aes(x = year, y = prop, color = name)) + 
+  geom_line() +
+  facet_wrap("sex") +
+  labs(x = "Year",
+       y = "Fraction",
+       title = "Names that Flash in the Pan")
+```
+
+## Names that "flash in the pan"
+
+```{r, eval = F, size = "tiny"}
+babynames_flash <-
+  babynames %>%
+  group_by(name, sex) %>%
+  mutate(max_prop = max(prop)) %>%
+  filter(max_prop > 0.01) %>%
+  mutate(change_in_pop = (prop/lag(prop, 1) - 1)) %>%
+  summarise(min_change = min(change_in_pop, na.rm = T)) %>%
+  group_by(sex) %>%
+  arrange(min_change) %>%
+  slice(1:5) %>%
+  pull(name)
+```
+
+
+## Names that "switch" - optional homework
+
+
+Challenge: Come up with a way to identify names that "switch"
+
+```{r, echo = F}
+babynames %>%
+  filter(name %in% c("Leslie", "Santana", "Kerry", "Jackie")) %>%
+  ggplot(aes(x = year, y = prop, color = sex)) +
+  geom_line() + 
+  facet_wrap("name", scales = "free_y") +
+  theme(legend.position = "top")
+```
+
+
+## `dplyr` recap
+
+
+\begin{figure}[!htbp]
+     \begin{centering}
+     \includegraphics[width=0.8\textwidth]{figures/dplyr_recap.jpg}
+     \end{centering}
+\end{figure}
