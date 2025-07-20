@@ -1,7 +1,7 @@
 ---
 title: "Programming Camp Day 3"
 author: "Augustus Kmetz"
-date: "2023-09-05"
+date: "September 12, 2025"
 format: 
   beamer:
     include-in-header:
