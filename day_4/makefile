@@ -4,4 +4,4 @@ QMD = programming_camp_day_4.qmd
 all: $(PDF)
 
 $(PDF): $(QMD)
-	quarto render $(QMD) --to beamer --no-watch-inputs --no-browse 
+	quarto render $(QMD)
