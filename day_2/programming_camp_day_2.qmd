@@ -104,16 +104,27 @@ babynames.csv
      \end{centering}
 \end{figure}
 
-## Number of girls with the name Shifra(h)
+## Number of children with the name Augustus
 
 ```{r, echo = F}
 babynames %>%
-  filter(name == "Shifra") %>%
+  filter(name == "Augustus") %>%
 ggplot() +
   geom_line(aes(x = year, y = n))
 ```
 
-Q for later: Why is the correct spelling of my name not in this data set?
+**Q**: Why was there a spike in children with the name Augustus?
+
+## Plausible Explanation: Release of the movie "The Fault in Our Stars"
+
+```{r, echo = F}
+babynames %>%
+  filter(name == "Augustus") %>%
+  filter(year >= 1990) %>%
+ggplot() +
+  geom_line(aes(x = year, y = n)) +
+  geom_vline(xintercept = 2014, linetype = "dashed", color = "red")
+```
 
 # Import Data
 
@@ -209,12 +220,12 @@ babynames
 
 ```{r, echo = F}
 babynames %>%
-  filter(name == "Shifra") %>%
+  filter(name == "Augustus") %>%
 ggplot() +
   geom_line(aes(x = year, y = n)) +
   labs(x = "Year",
        y = "Number",
-       title = "Number of Girls Named Shifra(h) over Time")
+       title = "Number of Boys Named Augustus over Time")
 ```
 
 **Q:** Which geom?
@@ -351,7 +362,7 @@ select(babynames, starts_with("n"))
 select(babynames, ends_with("e"))
 ```
 
-Any many more!
+And many more!
 
 ## Quiz
 
@@ -446,15 +457,15 @@ Use `filter`, `babynames` and the logical operators to:
 1. Using `=` instead of `==`
 
 ```{r, eval = F}
-filter(babynames, name = "Shifra")
-filter(babynames, name =="Shifra")
+filter(babynames, name = "Augustus")
+filter(babynames, name =="Augustus")
 ```
 
 2. Forgetting quotes 
 
 ```{r, eval = F}
-filter(babynames, name == Shifra)
-filter(babynames, name =="Shifra")
+filter(babynames, name == Augustus)
+filter(babynames, name =="Augustus")
 ```
 
 
@@ -510,7 +521,7 @@ order rows from largest to smallest values
 arrange(babynames, desc(n))
 ```
 
-**Q**: Why is the name Shifrah not in `babynames`?
+**Q**: INSERT QUESTION HERE
 
 ## Steps
 
@@ -573,7 +584,7 @@ Try to use `%>%` to write a sequence of functions that make a plot of your name'
 
 ```{r}
 babynames %>%
-  filter(name == "Shifra", sex == "F") %>%
+  filter(name == "Augustus", sex == "M") %>%
   ggplot() +
   geom_line(aes(x = year, y = n))
 ```
@@ -607,7 +618,7 @@ babynames %>%
 
 ```{r, eval = F}
 babynames %>% 
-  filter(name == "Shifra") %>%
+  filter(name == "Augustus") %>%
   summarise(total = sum(n), max = max(n))
 ```
 
