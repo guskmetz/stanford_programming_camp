@@ -120,10 +120,11 @@ ggplot() +
 ```{r, echo = F}
 babynames %>%
   filter(name == "Augustus") %>%
-  filter(year >= 1990) %>%
+  filter(year >= 2000) %>%
 ggplot() +
   geom_line(aes(x = year, y = n)) +
-  geom_vline(xintercept = 2014, linetype = "dashed", color = "red")
+  geom_vline(xintercept = 2014, linetype = "dashed", color = "red") +
+  geom_text(aes(x = 2009, y = 600, label = "The Fault in Our Stars"), color = "red", hjust = 0)
 ```
 
 # Import Data
