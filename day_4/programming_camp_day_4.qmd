@@ -648,7 +648,7 @@ fahr_to_cel <- function(temp) {
   return(cel)
 }
 
-fahr_to_cel("shifrah")
+fahr_to_cel("augustus")
 ```
 
 Modify your `rock_paper_scissors()` function to restrict inputs
@@ -661,7 +661,7 @@ rock_paper_scissors <- function(player_1, player_2){
   if(!(player_1 %in% c("rock", "paper", "scissors") & 
        player_2 %in% c("rock", "paper", "scissors"))){
     
-    stop("The only valide inputs are rock, paper, or scissors")
+    stop("The only valid inputs are rock, paper, or scissors")
   }
   
   if (player_1 == player_2){
