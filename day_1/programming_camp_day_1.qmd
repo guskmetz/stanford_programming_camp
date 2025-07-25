@@ -84,8 +84,7 @@ library(AER)
 
 Introductions
 
-  * Shifrah - Bay area, cycling
-  * Marcelo - Rio, ...
+  * Gus - Norman, OK; board games...
 
 Introduce yourselves 
 
@@ -94,14 +93,14 @@ Introduce yourselves
 * Hobby *or* a book/movie/other thing you did recently 
 
 
-## Some Advice {.smaller}
+## Some Advice
 
 
 Free Disposal 
 
   * You are at the start of a very formative phase of your life
   * You are here for a marathon not a sprint
-  * Your cohort and the other students in the department are your colleges
+  * Your cohort and the other students in the department are your colleagues
   * You are all smart you don't need to prove that to anyone
   * Asking questions is a way to learn not to signal
   * Find some non-econ/non-grad student friends!
@@ -111,7 +110,11 @@ Free Disposal
 ## Famous Nature! {.smaller}
 
 
-Insert Yosemite picture here
+::: {layout-ncol=2}
+![Yosemite 1](./figures/yosemite_1.jpg)
+
+![Yosemite 2](./figures/yosemite_2.jpg)
+:::
 
 
 
@@ -119,6 +122,15 @@ Insert Yosemite picture here
 
 
 Insert Russian Ridge or something else here
+
+
+::: {layout-ncol=2}
+![Grabtown Gulch](./figures/grabtown_gulch.jpg)
+
+![Henry Cowell Redwoods](./figures/henry_cowell_redwoods.jpg)
+:::
+
+
 
 ## Why do we have programming camp? {.smaller}
 
@@ -137,15 +149,16 @@ Insert Russian Ridge or something else here
 
 ## Why do we have programming camp? {.smaller}
 
+<!-- https://imgs.xkcd.com/comics/code_quality.png -->
 
-Code quality picture
+![xkcd 1513](./figures/code_quality.png)
 
 
 ## Use an appropriate tool for the job at hand {.smaller}
 
+<!-- https://imgs.xkcd.com/comics/real_programmers.png -->
 
-Real programmers
-
+![xkcd 378](./figures/real_programmers.png)
 
 
 
@@ -215,7 +228,7 @@ RStudio is a user-friendly graphical interface for the R software
   * Lots of nice built in helpfulness
   * Easy to interface with git
 
-We will use Rstudio Cloud
+We will use Posit Cloud (formerly RStudio Cloud)
 
   * Cloud version that can be accessed directly from your browser
   * Waste as little time as possible getting things set up
@@ -223,16 +236,16 @@ We will use Rstudio Cloud
   * Have you all set up your accounts?
 
 
-## RStudio Cloud's Interface
+## Posit Cloud's Interface
 
-R Studio cloud landing page
+Posit cloud landing page
 
-## RStudio Cloud's Interface
+## Posit Cloud's Interface
 
-RStudio cloud interface
+Posit cloud interface
 
 
-## RStudio Cloud's Interface
+## Posit Cloud's Interface
 
 Save a permanent copy
 
@@ -368,12 +381,16 @@ function_name(argument_1 = value_1,
 
 ## Packages
 
-Base R packages
+```{r}
+rownames(installed.packages(priority="base"))
+```
 
 
 ## Packages
 
-R packages
+```{r}
+rownames(installed.packages(priority="NA"))
+```
 
 
 ## Packages 
@@ -382,7 +399,7 @@ R packages
 # Install a package on your computer
 # (also this is how you write comments in R)
 # You only need to run this command once! 
-# (...you need to install all packages for every new RStudio Cloud Project Work space)
+# (...you need to install all packages for every new Posit Cloud Project Work space)
 install.packages("ggplot2")
 install.packages("AER")
 
@@ -393,10 +410,14 @@ library(AER)
 ```
 
 
-# Grammer of Graphics
+# Grammar of Graphics
 
 ## Why do we need to visualize data?
 
+<!-- https://www.research.autodesk.com/app/uploads/2023/03/DinoSequential-1.gif La vita e corta e difficile -->
+<!-- https://www.research.autodesk.com/app/uploads/2023/03/AllDinosAnimated-1.gif ![Alt Text](./figures/AllDinosAnimated-1.gif) -->
+
+\animategraphics[loop,width=8cm]{10}{figures/AllDinosAnimated-1/AllDinosAnimated-1_}{0}{93}
 
 [Matejka & Fitzmaurice 2017](https://www.autodesk.com/research/publications/same-stats-different-graphs)
 
@@ -427,6 +448,10 @@ library(AER)
   * inefficient for graph/network plots with nodes and edges
     * use `igraph` instead
 
+
+## A great graph
+
+![Napoleon's March](./figures/Minard.png)
 
 ## A good graph
 
@@ -532,7 +557,7 @@ ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
 ## Discrete vs continous aesthetics
 
 
-discrete vs continuous aesthetics
+discrete vs continuous aesthetics plot
 
 
 ## Layers
