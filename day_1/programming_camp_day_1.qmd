@@ -74,6 +74,14 @@ format:
 knitr::opts_chunk$set(echo = T, fig.width = 6.5, fig.height = 3)
 library(ggplot2)
 library(AER)
+library(tidyverse)
+library(lubridate)
+library(ggmap)
+library(ggrepel)
+library(gridExtra)
+library(pander)
+library(maps)           # for drawing basic geographical maps
+
 ```
 
 
@@ -417,7 +425,8 @@ library(AER)
 <!-- https://www.research.autodesk.com/app/uploads/2023/03/DinoSequential-1.gif La vita e corta e difficile -->
 <!-- https://www.research.autodesk.com/app/uploads/2023/03/AllDinosAnimated-1.gif ![Alt Text](./figures/AllDinosAnimated-1.gif) -->
 
-\animategraphics[loop,width=8cm]{10}{figures/AllDinosAnimated-1/AllDinosAnimated-1_}{0}{93}
+\centering
+\animategraphics[loop,width=12cm]{10}{figures/DinoSequential-1/DinoSequential-1_}{0}{263}
 
 [Matejka & Fitzmaurice 2017](https://www.autodesk.com/research/publications/same-stats-different-graphs)
 
@@ -453,24 +462,119 @@ library(AER)
 
 ![Napoleon's March](./figures/Minard.png)
 
-## A good graph
+## Unpacking the aesthetics
 
-Population Weighted Distribution of Taste
-figures/deposit_spread.pdf
-
-
-
-## Good graphs lead to other good graphs
-
-Distribution of Taste by Age
-figures/deposit_spread_age.pdf
-
-## Fancy graphics
-
-Atlantic Hurricane Tracks
-figures/hurricane_tracks.jpeg
+| Information | Aesthetic |
+|-------------|-----------|
+| Size of Napoleon's Grande Armée | Width of path |
+| Longitude of the army's position | x-axis |
+| Latitude of the army's position | y-axis |
+| Direction of the army's movement | Color of path |
+| Date of points along retreat path | Text below plot |
+| Temperature during the army's retreat | Line below plot |
 
 
+## Reproduced in ggplot2
+
+```{r reproduceminard, eval = T, echo=F}
+cities <- read.table("https://raw.githubusercontent.com/andrewheiss/fancy-minard/refs/heads/master/input/minard/cities.txt",
+                     header = TRUE, stringsAsFactors = FALSE)
+troops <- read.table("https://raw.githubusercontent.com/andrewheiss/fancy-minard/refs/heads/master/input/minard/troops.txt",
+                     header = TRUE, stringsAsFactors = FALSE)
+temps <- read.table("https://raw.githubusercontent.com/andrewheiss/fancy-minard/refs/heads/master/input/minard/temps.txt",
+                    header = TRUE, stringsAsFactors = FALSE) %>%
+  mutate(date = dmy(date))  # Convert string to actual date
+
+temps.nice <- temps %>%
+  mutate(nice.label = paste0(temp, "°, ", month, ". ", day))
+
+# No map this time
+march.1812.plot.simple <- ggplot() +
+  geom_path(data = troops, aes(x = long, y = lat, group = group,
+                               color = direction, size = survivors),
+            lineend = "round") +
+  geom_point(data = cities, aes(x = long, y = lat),
+             color = "#DC5B44") +
+  geom_text_repel(data = cities, aes(x = long, y = lat, label = city),
+                  color = "#DC5B44") +
+  scale_size(range = c(0.5, 10)) +
+  scale_colour_manual(values = c("#DFC17E", "#252523")) +
+  guides(color = FALSE, size = FALSE) +
+  theme_nothing()
+
+# Change the x-axis limits to match the simple map
+temps.1812.plot <- ggplot(data = temps.nice, aes(x = long, y = temp)) +
+  geom_line() +
+  geom_label(aes(label = nice.label),
+             size = 2.5) +
+  labs(x = NULL, y = "° Celsius") +
+  scale_x_continuous(limits = ggplot_build(march.1812.plot.simple)$layout$panel_ranges[[1]]$x.range) +
+  scale_y_continuous(position = "right") +
+  coord_cartesian(ylim = c(-35, 5)) +  # Add some space above/below
+  theme_bw() +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.text.x = element_blank(), axis.ticks = element_blank(),
+        panel.border = element_blank())
+
+# Combine the two plots
+both.1812.plot.simple <- rbind(ggplotGrob(march.1812.plot.simple),
+                               ggplotGrob(temps.1812.plot))
+
+# Adjust panels
+panels <- both.1812.plot.simple$layout$t[grep("panel", both.1812.plot.simple$layout$name)]
+
+# Because this plot doesn't use coord_equal, since it's not a map, we can use
+# whatever relative numbers we want, like a 3:1 ratio
+both.1812.plot.simple$heights[panels] <- unit(c(3, 1), "null")
+
+grid::grid.newpage()
+grid::grid.draw(both.1812.plot.simple)
+```
+
+[Minard Reproduced with ggplot2](https://www.andrewheiss.com/blog/2017/08/10/exploring-minards-1812-plot-with-ggplot2/)
+
+
+
+<!-- A good graph -->
+
+<!-- Population Weighted Distribution of Taste -->
+<!-- figures/deposit_spread.pdf -->
+
+
+
+<!-- Good graphs lead to other good graphs -->
+
+<!-- Distribution of Taste by Age -->
+<!-- figures/deposit_spread_age.pdf -->
+
+## Map graphics
+
+<!-- Atlantic Hurricane Tracks -->
+<!-- figures/hurricane_tracks.jpeg -->
+
+```{r hurricanemaps, echo=F, eval=T}
+storms75 <- filter(storms, year == 1975)
+
+# world map data
+world_map <- map_data("world")
+# create a ggplot object with the world map
+gg_world <- ggplot() + 
+  geom_polygon(data = world_map, 
+               aes(x = long, y = lat, group = group), 
+               fill = "gray95", colour = "gray70", linewidth = 0.2) +
+  theme_bw()
+
+gg_world +
+  geom_path(data = storms75,
+             aes(x = long, y = lat, color = name, linewidth = wind),
+             lineend = "round", alpha = 0.4) +
+  xlim(c(-150, 0)) + 
+  ylim(c(0, 90))
+```
+\centering
+[Atlantic Hurricane Tracks](https://www.gastonsanchez.com/R-tidy-hurricanes/maps-ggplot.html)
 
 ## How to build a plot
 
@@ -553,19 +657,22 @@ ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
 * Install and load the package `ggthemes`
 * Try **adding** a theme to your plot such as `theme_stata()`, `theme_economist()`
 	
+## Discrete vs continuous aesthetics
 
-## Discrete vs continous aesthetics
+The nature of the data determines the type of aesthetics and graphics you can use. 
 
+In `ggplot2`, there are two types of aesthetics: discrete and continuous.
+* Discrete aesthetics are used to represent categories/classes.
+* Continuous aesthetics are used to represent numbers.
 
-discrete vs continuous aesthetics plot
-
+Sometimes, the aesthetic is neither perfectly discrete or continuous. You could map a category to color (like retreat status in the Minard plot), but you could also map a number to the color (for instance temperature). This is where your judgement comes in (which matters since we are social scientists).
 
 ## Layers
 
 \begin{enumerate}
 \item data and aesthetic mapping
 \begin{itemize}
-  \item data are what turns an abstract graphic into a concrete graphic
+  \item data are what turn an abstract graphic into a concrete graphic
   \item along with data we need a specification of which variables are mapped to which aesthetics
   \item redundant mappings are important for making accessible graphics for men (colorblind individuals)
 \end{itemize}
@@ -578,6 +685,17 @@ discrete vs continuous aesthetics plot
 \item position adjustment
 \end{enumerate}
 
+## Layers (pandoc's version)
+
+1. data and aesthetic mapping
+   - data are what turn an abstract graphic into a concrete graphic
+   - along with data we need a specification of which variables are mapped to which aesthetics
+   - redundant mappings are important for making accessible graphics for men (colorblind individuals)
+2. statistical transformation
+3. geometric object (geoms)
+   - control the type of plot you create
+   - each geom can only display certain aesthetics
+4. position adjustment
 
 ## Layers in the wild
 
@@ -593,9 +711,6 @@ ggplot() +
 	     fill = "Year",
 	     title = "Distribution of Excise Taxes over Time")
 ```
-
-
-
 
 ## Using a chart to make a point
 
@@ -619,7 +734,7 @@ ggplot() +
 
 How has the distribution of taxes changed over time? 
 
-```{r make_a_point_plot}
+```{r make_a_point_plot, echo=F, eval=T}
 ggplot() + 
 	geom_histogram(data = CigarettesSW, 
 	               aes(x = tax, fill = year),
