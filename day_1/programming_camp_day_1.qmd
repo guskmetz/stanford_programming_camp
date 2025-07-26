@@ -244,18 +244,28 @@ We will use Posit Cloud (formerly RStudio Cloud)
   * Have you all set up your accounts?
 
 
-## Posit Cloud's Interface
+## Getting Started with Posit Cloud 1
 
-Posit cloud landing page
+![Posit Cloud landing page](./figures/1_posit_cloud_landing_page.png)
 
-## Posit Cloud's Interface
+## Getting Started with Posit Cloud 2
 
-Posit cloud interface
+![Empty workspace](./figures/2_posit_cloud_workspace.png)
 
 
-## Posit Cloud's Interface
+## Getting Started with Posit Cloud 3
 
-Save a permanent copy
+![Empty workspace](./figures/3_posit_cloud_new_project_git.png)
+
+## Getting Started with Posit Cloud 4
+
+![Empty workspace](./figures/4_posit_cloud_load_project.png)
+
+
+## Getting Started with Posit Cloud 5
+
+![Empty workspace](./figures/5_posit_cloud_loaded_project.png)
+
 
 ## Running R code {.smaller}
 
@@ -389,6 +399,8 @@ function_name(argument_1 = value_1,
 
 ## Packages
 
+R comes pre-loaded with a number of packages, appropriately called the base packages. We can see which packages are installed by running the following command:
+
 ```{r}
 rownames(installed.packages(priority="base"))
 ```
@@ -396,9 +408,7 @@ rownames(installed.packages(priority="base"))
 
 ## Packages
 
-```{r}
-rownames(installed.packages(priority="NA"))
-```
+![Installed packages](./figures/rpackages_images.png)
 
 
 ## Packages 
@@ -573,8 +583,9 @@ gg_world +
   xlim(c(-150, 0)) + 
   ylim(c(0, 90))
 ```
+
 \centering
-[Atlantic Hurricane Tracks](https://www.gastonsanchez.com/R-tidy-hurricanes/maps-ggplot.html)
+[1975 Atlantic Hurricane Tracks](https://www.gastonsanchez.com/R-tidy-hurricanes/maps-ggplot.html)
 
 ## How to build a plot
 
@@ -611,19 +622,19 @@ We can look at the data using the functions: `head()`, `tail()`, `summary()`, an
   * the scales and coordinate system - which generates axes and legends so we can read values from the graph
   * plot annotations - such as the background and plot title
 
-## Elements of a plot
+<!-- ## Elements of a plot -->
 
-elements of a plot
+<!-- elements of a plot -->
 
 
-## A complete plot
+<!-- ## A complete plot -->
 
-the complete plot
+<!-- the complete plot -->
 
 
 ## Actually building the plot
 
-How do we actually implement this grammar using code?
+How do we implement this grammar using code?
 
   * `ggplot()` function initializes a basic graph structure
   * Different parts of a plot can be added together using `+`
@@ -662,6 +673,7 @@ ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
 The nature of the data determines the type of aesthetics and graphics you can use. 
 
 In `ggplot2`, there are two types of aesthetics: discrete and continuous.
+
 * Discrete aesthetics are used to represent categories/classes.
 * Continuous aesthetics are used to represent numbers.
 
@@ -684,18 +696,6 @@ Sometimes, the aesthetic is neither perfectly discrete or continuous. You could 
 \end{itemize}
 \item position adjustment
 \end{enumerate}
-
-## Layers (pandoc's version)
-
-1. data and aesthetic mapping
-   - data are what turn an abstract graphic into a concrete graphic
-   - along with data we need a specification of which variables are mapped to which aesthetics
-   - redundant mappings are important for making accessible graphics for men (colorblind individuals)
-2. statistical transformation
-3. geometric object (geoms)
-   - control the type of plot you create
-   - each geom can only display certain aesthetics
-4. position adjustment
 
 ## Layers in the wild
 
