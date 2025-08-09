@@ -106,7 +106,7 @@ babynames.csv
 
 ## Number of children with the name Augustus
 
-```{r, echo = F}
+```{r augustus_name_count_line, echo = F}
 babynames %>%
   filter(name == "Augustus") %>%
 ggplot() +
@@ -115,9 +115,13 @@ ggplot() +
 
 **Q**: Why was there a spike in children with the name Augustus?
 
+\pause
+
+**Answer:** The movie "The Fault in Our Stars" was released in 2014.
+
 ## Plausible Explanation: Release of the movie "The Fault in Our Stars"
 
-```{r, echo = F}
+```{r augustus_tfos_annotated_line, echo = F}
 babynames %>%
   filter(name == "Augustus") %>%
   filter(year >= 2000) %>%
@@ -212,14 +216,14 @@ And many many more...
 ```{r, eval = F}
 babynames <- read_csv("data/babynames.csv")
 ```
-```{r, size="tiny"}
+```{r print_babynames, size="tiny"}
 babynames
 ```
 
 
 ## Back to babynames
 
-```{r, echo = F}
+```{r augustus_name_count_line_labeled, echo = F}
 babynames %>%
   filter(name == "Augustus") %>%
 ggplot() +
@@ -409,12 +413,12 @@ filter(babynames, name == "Garrett")
 
 ## Logical tests
 
-```{r}
+```{r logical_scalar_ge_example}
 x <- 1
 x >= 2
 ```
 
-```{r}
+```{r logical_vector_ge_example}
 x <- c(1,2,3)
 x >= 2
 ```
@@ -497,7 +501,7 @@ filter(babynames, 10 < n < 20)
 filter(babynames, 10 < n, n < 20)
 ```
 
-4. Stringing together many tests (when you use `%in%`)
+4. Stringing together many tests (when you could use`%in%`)
 
 ```{r, eval = F}
 filter(babynames, n == 5 | n == 6 | n == 7 )
@@ -583,7 +587,7 @@ Try to use `%>%` to write a sequence of functions that make a plot of your name'
 
 ## Pipes
 
-```{r}
+```{r pipeline_plot_augustus}
 babynames %>%
   filter(name == "Augustus", sex == "M") %>%
   ggplot() +
@@ -624,6 +628,10 @@ babynames %>%
 ```
 
 **Q**: How can we do this for each name? 
+
+\pause
+
+**Answer:** Using the `group_by()` function (coming up next).
 
 ## `group_by()`
 
@@ -674,7 +682,7 @@ Partner up
 ## Distinct names Over time
 
 
-```{r, echo = F}
+```{r distinct_names_time_series, echo = F}
 babynames %>%
   group_by(year, sex) %>%
   summarise(n_names = n_distinct(name)) %>%
@@ -704,7 +712,7 @@ babynames %>%
 
 ## Top share over time
 
-```{r, echo = F}
+```{r top10_names_share_time_series, echo = F}
 babynames %>%
   group_by(year, sex) %>%
   arrange(prop) %>%
@@ -770,7 +778,7 @@ Any vectorized function can be used with `mutate()` including:
 
 What names experience a dramatic rise/fall in popularity?
 
-```{r, echo = F}
+```{r flash_in_pan_facets_examples, echo = F}
 babynames %>%
   filter(name %in% c("Rihanna", "Farrah", "Dewey", "Elvis")) %>%
   ggplot(aes(x = year, y = prop, color = sex)) +
@@ -794,7 +802,7 @@ Step 2: plot the popularity over time for those names
 
 ## Names that "flash in the pan"
 
-```{r, echo = F}
+```{r flash_in_pan_identify_and_plot, echo = F}
 babynames_flash <-
   babynames %>%
   group_by(name, sex) %>%
@@ -839,7 +847,7 @@ babynames_flash <-
 
 Challenge: Come up with a way to identify names that "switch"
 
-```{r, echo = F}
+```{r names_switch_facets_examples, echo = F}
 babynames %>%
   filter(name %in% c("Leslie", "Santana", "Kerry", "Jackie")) %>%
   ggplot(aes(x = year, y = prop, color = sex)) +

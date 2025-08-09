@@ -188,7 +188,7 @@ Plans for today:
 
 ## (Regression) tables
 
-`stargazer` package is great for making ice regression tables that work well with markdown
+`stargazer` package is great for making nice regression tables that work well with markdown
 
 ```{r, eval = F}
 stargazer(weather_delay_model_fe, header = F)
@@ -259,7 +259,7 @@ if(<condition1>) {
 
 ## `if`
 
-```{r}
+```{r if_basic_condition}
 x <- 8
 
 if (x >= 10) {
@@ -273,7 +273,7 @@ if (x >= 10) {
 
 ## `if`, `else`
 
-```{r}
+```{r if_else_demo}
 x <- 8
 
 if (x >= 10) {
@@ -290,7 +290,7 @@ if (x >= 10) {
 ## `if`, `elseif`, `else`
 
 
-```{r}
+```{r if_elseif_else_demo}
 x <- 8
 
 if (x >= 10) {
@@ -399,7 +399,7 @@ for (i in 1:5) {
 
 ## Tips!
 
-```{r}
+```{r inefficient_growth_benchmark}
 output_vector <- c()
 
 tic()
@@ -422,7 +422,7 @@ toc()
 
 ## Tips!
 
-```{r}
+```{r preallocate_matrix_benchmark}
 output_matrix <- matrix(nrow = 1000, ncol = 5)
 j_vector <- c('a', 'b', 'c', 'd', 'e')
 
@@ -565,7 +565,7 @@ my_function <- function(parameters) {
 }
 ```
 
-```{r, eval = T}
+```{r fahr_to_cel_define_and_test, eval = T}
 fahr_to_cel <- function(temp) {
   cel <- ((temp - 32) * (5 / 9))
   return(cel)
@@ -578,7 +578,7 @@ fahr_to_cel(100)
 ## Documenting your functions
 
 
-```{r}
+```{r define_rmse_function}
 root_mean_squared_error <- function(predicted, targets){  
     # Computes root mean squared error between two vectors
     #

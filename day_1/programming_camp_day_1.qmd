@@ -128,10 +128,6 @@ Free Disposal
 
 ## Local Nature! {.smaller}
 
-
-Insert Russian Ridge or something else here
-
-
 ::: {layout-ncol=2}
 ![Grabtown Gulch](./figures/grabtown_gulch.jpg)
 
@@ -255,16 +251,16 @@ We will use Posit Cloud (formerly RStudio Cloud)
 
 ## Getting Started with Posit Cloud 3
 
-![Empty workspace](./figures/3_posit_cloud_new_project_git.png)
+![Import project from git repo](./figures/3_posit_cloud_new_project_git.png)
 
 ## Getting Started with Posit Cloud 4
 
-![Empty workspace](./figures/4_posit_cloud_load_project.png)
+![www.github.com/guskmetz/stanford_programming_camp_worksheets](./figures/4_posit_cloud_load_project.png)
 
 
 ## Getting Started with Posit Cloud 5
 
-![Empty workspace](./figures/5_posit_cloud_loaded_project.png)
+![Your new workspace](./figures/5_posit_cloud_loaded_project.png)
 
 
 ## Running R code {.smaller}
@@ -302,13 +298,13 @@ Scripting mode
 * In R you do not declare the variable type 
 * You can create new objects with `<-` (also `->`)
 
-```{r}
+```{r num_42s}
 x <- 42
 ```
 
 * Combine items using `c()`
 
-```{r}
+```{r list_example}
 x <- c(42, 43)
 x[1]
 ```
@@ -401,14 +397,14 @@ function_name(argument_1 = value_1,
 
 R comes pre-loaded with a number of packages, appropriately called the base packages. We can see which packages are installed by running the following command:
 
-```{r}
+```{r list_base_packages}
 rownames(installed.packages(priority="base"))
 ```
 
 
 ## Packages
 
-![Installed packages](./figures/rpackages_images.png)
+![Installed packages](./figures/rpackages_images.png){width=80%}
 
 
 ## Packages 
@@ -444,7 +440,7 @@ library(AER)
 ## Introduction
 
   * What is a graphic? How can we succinctly describe a graphic? How can we create the graphic we described?
-  * A grammar is an abstraction which makes thinking reasoning and communicating graphics easier
+  * A grammar is an abstraction which makes thinking, reasoning, and communicating graphics easier
   * Developed by Lealand Wilkinson (1999/2005) refined and implemented in R by Hadley Wickham (2006)
   * Basic idea: building up a graphic from multiple layers of data
 
@@ -595,7 +591,7 @@ When creating a plot we start with data
 * This is a built in dataset from the `AER` packages
 * Step 1 is to load in the data
 
-```{r}
+```{r load_cigarettes_data}
 data("CigarettesSW")
 ```
 
@@ -652,7 +648,7 @@ ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
 
 ## Actually building the plot
 
-```{r, eval = T, echo = F}
+```{r cigarettes_scatter_tax_packs, eval = T, echo = F}
 ggplot(CigarettesSW, aes(x = tax, y = packs, color = year)) +
   geom_point() +
   labs(x = "Average Excise Tax",
@@ -798,7 +794,7 @@ ggplot(CigarettesSW, aes(x = tax, fill = year)) +
 
 ## Scales in the wild
 
-```{r, echo = F}
+```{r cigarettes_tax_density_log10, echo = F}
 ggplot(CigarettesSW, aes(x = tax, fill = year)) + 
 	geom_density(alpha = 0.5, adjust = 2) +
 	labs(x = "Average Excise Tax",
@@ -833,7 +829,7 @@ ggplot(BankWages, aes(x = job, fill = gender)) +
 
 ## Bar plots
 
-```{r, echo = F}
+```{r bankwages_job_gender_count, echo = F}
 data(BankWages)
 
 ggplot(BankWages, aes(x = job, fill = gender)) +
@@ -859,7 +855,7 @@ ggplot(BankWages, aes(x = job, fill = gender)) +
 
 ## Bar plots
 
-```{r, echo = F}
+```{r bankwages_job_gender_share, echo = F}
 ggplot(BankWages, aes(x = job, fill = gender)) +
   geom_bar(position = "fill") +
   labs(x = "Job",
@@ -887,7 +883,7 @@ ggplot(BankWages, aes(x = job, fill = gender)) +
 ```
 ## Faceting
 
-```{r, echo = F}
+```{r bankwages_job_gender_by_minority, echo = F}
 ggplot(BankWages, aes(x = job, fill = gender)) +
   geom_bar() +
   labs(x = "Job",

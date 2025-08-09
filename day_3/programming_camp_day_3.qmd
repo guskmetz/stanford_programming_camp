@@ -141,6 +141,10 @@ But each data set organizes the values in a different way
 
 **Q:** Which one is tidy? 
 
+\pause 
+
+**Answer:** `table1` is tidy.
+
 ## Why tidy data?
 
 
@@ -161,19 +165,19 @@ The principles of tidy data seem so obvious
 
 ## Dealing with untidy data
 
-
 **First Step:** determine what are the variables and what are the observations
+
 **Second Step:** deal with the following common issues
 
   * one variable is spread across multiple columns -> need to `pivot_longer()`
   * one observation scattered across multiple rows -> need to `pivot_wider()`
-  * one column contains values for multiple variables -> need to `seperate()`
+  * one column contains values for multiple variables -> need to `separate()`
   * multiple columns store information on a single variable -> need to `unite()`
   
   
 ## Dealing with untidy data
 
-```{r, echo = F}
+```{r table1_cases_over_time_plot, echo = F}
 ggplot(table1, aes(year, cases)) + 
   geom_line(aes(group = country), colour = "grey50") + 
   geom_point(aes(colour = country))
@@ -205,10 +209,20 @@ To tidy up `table4a` we need to `pivot_longer()` those columns into a new pair o
 
 ```{r, eval = F}
 table4a %>% 
-  pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "cases")
+  pivot_longer(c(`1999`, `2000`), 
+  names_to = "year", values_to = "cases")
 ```
 
 **Q:** How can we fix up `table4b`?
+```{r, eval = F}
+table4b %>% 
+  pivot_longer(c(`1999`, `2000`),
+  names_to = "year", values_to = "population")
+```
+
+\pause
+
+**Answer:**
 
 
 ## `pivot_wider()`
@@ -240,11 +254,9 @@ table2 %>%
 
 ## Your turn!
 
-
 Why are `pivot_longer()` and `pivot_wider()` not perfectly symmetrical?
 
 Carefully consider the following example:
-
 
 ```{r, eval = F}
 stocks <- tibble(
@@ -263,10 +275,9 @@ stocks %>%
 
 (Hint: look at the variable types and think about column names.)
 
-
 ## Your turn!
 
-Why does this code fail?
+**Question:** Why does this code fail?
 
 ```{r, eval = F}
 table4a %>% 
@@ -275,13 +286,16 @@ table4a %>%
                values_to = "cases")
 ```
 
+\pause
+
+**Answer:** The column names are strings, but `pivot_longer()` expects them to be numbers because of how the list is specified.
 
 
 ## Separate
   
 **Common problem:** some data sets have columns with values corresponding to multiple variables
 
-`seperate()` makes tables wider (`unite()` is the opposite of separate)
+`separate()` makes tables wider (`unite()` is the opposite of separate)
 
 \begin{figure}[!htbp]
      \begin{centering}
@@ -347,6 +361,9 @@ Take a look at the `flights` dataset
 
 **Q:** Is `flights` a tidy data set?
 
+\pause
+
+**Answer:** Yes, because each variable is in a column and each observation is in a row.
  
 ## `dplyr` verbs (functions)
 
@@ -416,7 +433,6 @@ Same syntax works for `Inf` and `NaN`: `is.inf()`, `is.nan()`
 
 ## The pipe operator %>%
 
-
 Passes results on left into first argument of function on right
 
 In pipe notation you use:
@@ -465,8 +481,6 @@ Use `arrange()` to:
 1. Sort flights to find the most delayed flights. 
 2. Find the flights that left earliest
 3. Sort flights to find the fastest (highest speed) flights
-
-
 
 ## `summarise()`
 
@@ -538,7 +552,7 @@ Any vectorized function can be used with `mutate()` including:
 
 Produce the following chart. What does the underlying data look like?
 
-```{r, echo = F}
+```{r carrier_cancel_fraction_by_code_plot, echo = F}
 flights %>%
   group_by(carrier) %>%
   summarise(frac_can= sum(is.na(arr_delay)) / n()) %>%
@@ -551,9 +565,7 @@ flights %>%
   guides(fill = "none")
 ```
 
-
 But these two digit abbreviations are not useful!
-
 
 # Relational Data
 
@@ -589,7 +601,6 @@ There are several tables that are helpful for our analysis all from the `nycflig
 
 
 ## `nycflights13`
-
 
 In words:
 
@@ -642,7 +653,7 @@ Four main types of joins (there are more exotic ones)
 
 Produce the following chart. What does the underlying data look like?
 
-```{r, echo = F}
+```{r carrier_cancel_fraction_by_airline_plot, echo = F}
 flights %>%
   left_join(airlines, by = "carrier") %>%
   group_by(name) %>%
@@ -651,10 +662,11 @@ flights %>%
   ggplot() +
   geom_col(aes(y = fct_reorder(name, frac_can, .desc = TRUE), x = frac_can, fill = frac_can)) +
   scale_fill_gradient(low = "blue", high = "red") +
-  labs(x = "Carrier",
-       y = "Fraction Cancelled") + 
+  labs(x = "Fraction Cancelled",
+       y = "Carrier") + 
   guides(fill = "none")
 ```
+
 
 ## Your turn!
 
@@ -667,8 +679,8 @@ flights %>%
   ggplot() +
   geom_col(aes(y = fct_reorder(name, frac_can, .desc = TRUE), x = frac_can, fill = frac_can)) +
   scale_fill_gradient(low = "blue", high = "red") +
-  labs(x = "Carrier",
-       y = "Fraction Cancelled") + 
+  labs(x = "Fraction Cancelled",
+       y = "Carrier") + 
   guides(fill = "none")
 ```
 
@@ -689,7 +701,7 @@ Then join these two data sets together into a data set called `nyc_weather_delay
 
 ## Data setup
 
-```{r}
+```{r build_nyc_flights_daily_summary}
 nyc_flights <-
   flights %>%
   group_by(carrier, year, month, day, origin) %>%
@@ -704,7 +716,7 @@ nyc_flights <-
 
 ## Data setup
 
-```{r}
+```{r build_nyc_weather_and_join_delays}
 nyc_weather <-
   weather %>%
   group_by(year, month, day, origin) %>% 
@@ -742,7 +754,7 @@ summary(weather_delay_model)
 
 ## Adding regression lines to charts
 
-```{r, echo = F, fig.height = 4}
+```{r dep_delay_vs_precip_lm_plot, echo = F, fig.height = 4}
 nyc_weather_delays %>%
   left_join(airlines, by = "carrier") %>%
   ggplot(aes(y = dep_delay, x = precip)) +
@@ -761,6 +773,20 @@ nyc_weather_delays %>%
   ggplot(aes(y = dep_delay, x = precip)) +
   geom_point(aes(color = name), alpha = 0.2) +
   geom_smooth(method = "lm", se = F) +
+  labs(x = "Total Precipitation",
+       y = "Average Delay ",
+       color = "Airline")
+```
+
+
+## Adding regression lines for each airline
+
+```{r, eval = F}
+nyc_weather_delays %>%
+  left_join(airlines, by = "carrier") %>%
+  ggplot(aes(y = dep_delay, x = precip)) +
+  geom_point(aes(color = name), alpha = 0.2) +
+  geom_smooth(aes(color = name), method = "lm", se = F) +
   labs(x = "Total Precipitation",
        y = "Average Delay ",
        color = "Airline")
