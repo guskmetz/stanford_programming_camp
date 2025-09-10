@@ -385,6 +385,10 @@ select(babynames, starts_with("n"))
 select(babynames, ends_with("n"))
 ```
 
+\pause
+
+**Answer:** `select(babynames, ends_with("n"))`
+
 ## `filter()`
 
 Extract rows that meet logical criteria
@@ -524,9 +528,7 @@ order rows from largest to smallest values
 
 ```{r, eval = F}
 arrange(babynames, desc(n))
-```
-
-**Q**: INSERT QUESTION HERE
+``` 
 
 ## Steps
 
@@ -584,6 +586,8 @@ top_5_M_2015 <-
 ```
 
 Try to use `%>%` to write a sequence of functions that make a plot of your name's popularity over time (or linguistically similar name)
+
+*Hint:* Don't forget about `ggplot()`'s pipe operator analogue `+`
 
 ## Pipes
 
@@ -679,7 +683,7 @@ Partner up
 
 
 
-## Distinct names Over time
+## Distinct names over time
 
 
 ```{r distinct_names_time_series, echo = F}
@@ -694,7 +698,7 @@ babynames %>%
        caption = "Note: Only names with at least five records are included in the SSA data.") 
 ```
 
-## Distinct names Over time
+## Distinct names over time
 
 
 ```{r, eval = F}
