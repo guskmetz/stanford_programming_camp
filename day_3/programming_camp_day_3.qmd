@@ -139,7 +139,9 @@ Each data set shows the same four variables:
   
 But each data set organizes the values in a different way
 
-**Q:** Which one is tidy? 
+**Q:** Which one is tidy?
+
+**Hint:** View the files in the `day_3.R` file.
 
 \pause 
 
@@ -214,15 +216,15 @@ table4a %>%
 ```
 
 **Q:** How can we fix up `table4b`?
+
+\pause
+
+**Answer:**
 ```{r, eval = F}
 table4b %>% 
   pivot_longer(c(`1999`, `2000`),
   names_to = "year", values_to = "population")
 ```
-
-\pause
-
-**Answer:**
 
 
 ## `pivot_wider()`
@@ -264,7 +266,6 @@ stocks <- tibble(
   half  = c(   1,    2,     1,    2),
   return = c(1.88, 0.59, 0.92, 0.17)
 )
-
 stocks %>% 
   pivot_wider(names_from = year, 
               values_from = return) %>% 
@@ -273,7 +274,7 @@ stocks %>%
                values_to = "return")
 ```
 
-(Hint: look at the variable types and think about column names.)
+**A:** `pivot_wider()` converts the column names to strings. This is fixed in the `day_3.R` file.
 
 ## Your turn!
 
@@ -288,7 +289,7 @@ table4a %>%
 
 \pause
 
-**Answer:** The column names are strings, but `pivot_longer()` expects them to be numbers because of how the list is specified.
+**Answer:** The column names are strings, but `pivot_longer()` expects them to be numbers because of how the list is specified. This is fixed in the `day_3.R` file.
 
 
 ## Separate
@@ -304,9 +305,11 @@ table4a %>%
 \end{figure}
 
 
-## `separate()` 
+## `separate()`
 
-`separate()` splits one column into multiple columns whenever a separator appears
+**Activity:** Follow along with the code in the `day_3.R` file.
+
+`separate()` splits one column into multiple columns whenever a separator appears.
 
 ```{r, eval = F}
 table3 %>%
@@ -346,6 +349,17 @@ We will look at the data set `flights`
 * Data from the US Bureau of Transportation statistics
 	
 Please load the `nycflights13` package
+
+**Q:** How do you load the `nycflights13` package?
+
+\pause
+
+**Answer:**
+
+```{r, eval = F}
+install.packages("nycflights13")
+library(nycflights13)
+```
 
 Take a look at the `flights` dataset
 
@@ -444,13 +458,15 @@ This is similar to Unix pipes
 
 ## Your turn!
 
+**Activity:** Do the below fact-finding activity.
+
 Find all flights that:
 
 1.  Had an arrival delay of two or more hours
 2.  Flew to Houston (IAH or HOU)
 3.  Arrived more than two hours late, but didn’t leave late
 
-Explore a bit:
+Explore a bit: (**Hint:** Use the `view()` function to directly view the data.)
 
 1. What does a cancelled flight look like?
 2. Make a data set called `not_cancelled` that contains all non-cancelled flights
@@ -550,7 +566,7 @@ Any vectorized function can be used with `mutate()` including:
 
 ## Your turn!
 
-Produce the following chart. What does the underlying data look like?
+**Activity:** Produce the following chart. What do the underlying data look like?
 
 ```{r carrier_cancel_fraction_by_code_plot, echo = F}
 flights %>%
@@ -565,7 +581,20 @@ flights %>%
   guides(fill = "none")
 ```
 
-But these two digit abbreviations are not useful!
+## My solution (yours may be different)
+
+```{r carrier_cancel_fraction_by_code_plot_example, eval = F}
+flights %>%
+  group_by(carrier) %>%
+  summarise(frac_can= sum(is.na(arr_delay)) / n()) %>%
+  filter(frac_can > 0) %>%
+  ggplot() +
+  geom_col(aes(x = fct_reorder(carrier, frac_can, .desc = TRUE), y = frac_can, fill = frac_can)) +
+  scale_fill_gradient(low = "blue", high = "red") +
+  labs(x = "Carrier",
+       y = "Fraction Cancelled") + 
+  guides(fill = "none")
+```
 
 # Relational Data
 
